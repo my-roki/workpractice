@@ -7,6 +7,8 @@ pyautogui.write("Hello Pycharm", interval=0.25)
 pyautogui.write("\n")
 
 pyautogui.write(["t", "e", "s", "t", "left", "left", "right", "l", "a", "delete", "enter"], interval=0.25)
+# https://automatetheboringstuff.com/2e/chapter20/ 
+# 위 사이트에서 단축키에 대한 정보를 얻을 수 있다.
 
 # 특수문자
 pyautogui.keyDown("shift")  # shift키를 누른 상태에서
