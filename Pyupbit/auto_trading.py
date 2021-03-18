@@ -1,21 +1,37 @@
-import requests
-import json
-from pprint import pprint
-from datetime import datetime
-import time
-import os
-import jwt
-import uuid
 import hashlib
+import time
+import uuid
+from datetime import datetime
 from urllib.parse import urlencode
 
+import jwt
+import requests
 
+
+# 네트워크 ip 찾기
 def find_my_ip():
     r = requests.get(r'http://jsonip.com')
-    ip= r.json()['ip']
+    ip = r.json()['ip']
     return ip
 
 
+# 계좌 정보
+def coin_wallet():
+    payload = {
+        'access_key': access_key,
+        'nonce': str(uuid.uuid4()),
+    }
+
+    jwt_token = jwt.encode(payload, secret_key)
+    authorize_token = 'Bearer {}'.format(jwt_token)
+    headers = {"Authorization": authorize_token}
+
+    wallet_res = requests.get(server_url + "/v1/accounts", headers=headers).json()
+
+    return wallet_res
+
+
+# 시장가 매도
 def ask_market(market, volume, price):
     sell_query = {
         'market': str(market),
@@ -42,9 +58,10 @@ def ask_market(market, volume, price):
     headers = {"Authorization": authorize_token}
 
     sell_res = requests.post(server_url + "/v1/orders", params=sell_query, headers=headers)
-    return sell_res.json()
+    return print(sell_res.json())
 
 
+# 시장가 매수
 def bid_market(market, volume, price):
     buy_query = {
         'market': str(market),
@@ -71,83 +88,77 @@ def bid_market(market, volume, price):
     headers = {"Authorization": authorize_token}
 
     buy_res = requests.post(server_url + "/v1/orders", params=buy_query, headers=headers)
-    return buy_res.json()
-
+    return print(buy_res.json())
 
 
 access_key = 'NeC5CQaIHC1Jzslk9RXF77R1Q2gJCpFaQJINgxpj'
 secret_key = 'q8gCWTxOStFU7N2aK2HGpCcON5LSrQAalWH6EGGe'
 server_url = 'https://api.upbit.com'
 
-
-# 계좌 정보
-payload = {
-    'access_key': access_key,
-    'nonce': str(uuid.uuid4()),
-}
-
-jwt_token = jwt.encode(payload, secret_key)
-authorize_token = 'Bearer {}'.format(jwt_token)
-headers = {"Authorization": authorize_token}
-
-wallte_res = requests.get(server_url + "/v1/accounts", headers=headers).json()
-
-
 # 전략 구현
-market_querystring = {"isDetails":"false"}
+market_querystring = {"isDetails": "false"}
 market_response = requests.request("GET", server_url + "/v1/market/all", params=market_querystring).json()
 
+# 업비트에 상장되어 있는 모든 코인의 종류를 불러옵니다.
 coin_lists = []
 for i in range(0, len(market_response)):
     coin_lists.append(market_response[i]["market"])
-# print(krw_lists)
+# print(coin_lists)
 
+# 원화로 거래되고 있는 코인들의 리스트를 출력합니다.
 search = "KRW"
 krw_coins = [word for word in coin_lists if search in word]
 # print(krw_coin)
 
-while True :
+# 자동매매 시작
+while True:
     now = datetime.now()
     # print(now.strftime("%Y-%m-%d %H:%M:%S"))
-    if now.strftime("%M") == '35' or now.strftime("%M") == '05':
+    if now.strftime("%M") == '30' or now.strftime("%M") == '00':    # 정각, 30분 마다 분석 후 매매
         start_time = time.time()
-        print("\n","<<< {} 매매현황 >>>".format(now.strftime("%Y-%m-%d %H:%M:%S")))
+        time.sleep(0.5)
+        print("\n", "<<< {} 매매현황 >>>".format(now.strftime("%Y-%m-%d %H:%M:%S")))
 
         for coin in krw_coins:
             try:
-                MA3_querystring = {"market":coin,"count":"4"}
-                MA30_querystring = {"market":coin,"count":"31"}
+                MA4_querystring = {"market": coin, "count": "5"}
+                MA48_querystring = {"market": coin, "count": "49"}
                 time.sleep(1)
 
-                MA3_response = requests.request("GET", server_url + "/v1/candles/minutes/30", params=MA3_querystring).json()
-                MA30_response = requests.request("GET", server_url + "/v1/candles/minutes/30", params=MA30_querystring).json()
+                MA4_response = requests.request("GET", server_url + "/v1/candles/minutes/30",
+                                                params=MA4_querystring).json()
+                MA48_response = requests.request("GET", server_url + "/v1/candles/minutes/30",
+                                                 params=MA48_querystring).json()
                 time.sleep(1)
 
-                MA3_sum = 0
-                MA3_pre_sum = 0
-                for i in range(0, len(MA3_response)-1):
-                    MA3_sum += MA3_response[i]["trade_price"]
-                    MA3_pre_sum += MA3_response[-i]["trade_price"]
-                pre_MA3 = round(MA3_pre_sum/(len(MA3_response)-1), 2)
-                now_MA3 = round(MA3_sum/(len(MA3_response)-1), 2)
+                MA4_now_sum = 0
+                MA4_pre_sum = 0
+                for i in range(1, len(MA4_response)):
+                    MA4_now_sum += MA4_response[-i]["trade_price"]
+                    MA4_pre_sum += MA4_response[-i]["opening_price"]
 
-                MA30_sum = 0
-                MA30_pre_sum = 0
-                for j in range(0, len(MA30_response)-1):
-                    MA30_sum += MA30_response[j]["trade_price"]
-                    MA30_pre_sum += MA30_response[-j]["trade_price"]
-                pre_MA30 = round(MA30_pre_sum/(len(MA30_response)-1), 2)
-                now_MA30 = round(MA30_sum/(len(MA30_response)-1), 2)
+                pre_MA4 = round(MA4_pre_sum / (len(MA4_response) - 1), 2)
+                now_MA4 = round(MA4_now_sum / (len(MA4_response) - 1), 2)
+
+                MA48_now_sum = 0
+                MA48_pre_sum = 0
+                for j in range(1, len(MA48_response)):
+                    MA48_now_sum += MA48_response[-j]["trade_price"]
+                    MA48_pre_sum += MA48_response[-j]["opening_price"]
+
+                pre_MA48 = round(MA48_pre_sum / (len(MA48_response) - 1), 2)
+                now_MA48 = round(MA48_now_sum / (len(MA48_response) - 1), 2)
                 time.sleep(1)
                 # print(pre_MA3)
                 # print(pre_MA30)
                 # print(now_MA3)
                 # print(now_MA30)
-                
-                if now_MA3 < now_MA30 :
-                    if pre_MA3 > pre_MA30:
-                        print(f"        !!! {coin} 매도 !!!")
-                        for i in wallte_res:
+
+                if now_MA4 < now_MA48:
+                    if pre_MA4 > pre_MA48:
+                        print(f"!!! {coin} 매도 !!!")
+                        wallet_res = coin_wallet()
+                        for i in wallet_res:
                             if coin == f"{i['unit_currency']}-{i['currency']}":
                                 try:
                                     ask_market(f"{i['unit_currency']}-{i['currency']}", i['balance'], None)
@@ -155,24 +166,23 @@ while True :
                                     print(f"{i['unit_currency']}-{i['currency']} has some trouble : ", e)
                                     pass
 
-                elif now_MA3 > now_MA30:
-                    if pre_MA3 < pre_MA30:
-                        print(f"        !!! {coin} 매수 !!!")
+                elif now_MA4 > now_MA48:
+                    if pre_MA4 < pre_MA48:
+                        print(f"!!! {coin} 매수 !!!")
                         try:
-                            bid_market(coin, None, '5000')
+                            bid_market(coin, None, '20000')
                         except Exception as e:
                             print(f"{coin} can't buy : ", e)
                             pass
 
                 else:
                     # print("{} 같아서 pass".format(coin))
-                    pass                
+                    pass
             except Exception as e:
                 print(f"{coin} has problem in the trading strategy : ", e)
                 pass
-            time.sleep(0.5)   
+            time.sleep(0.5)
 
-        print("소요시간 : {}".format(time.time()-start_time))
-        time.sleep(60)
+        print("소요시간 : {}".format(time.time() - start_time))
     else:
-        pass 
+        pass

@@ -40,7 +40,6 @@
 # # print((btc3_response[-2]["high_price"]+btc3_response[-2]["low_price"])/2)
 
 
-
 # while url :
 #     now = datetime.now()
 #     # print(now.strftime("%Y-%m-%d %H:%M:%S"))
@@ -96,7 +95,6 @@
 #     print(now.strftime("%Y-%m-%d %H:%M:%S"))
 
 
-
 # # %%
 # btc3_sum = 0
 # btc3_pre_sum = 0
@@ -131,16 +129,16 @@
 # #%%
 # import schedule
 # import time
- 
+
 # #특정 함수 정의
 # def printhello():
 #     print("Hello!")
- 
- 
+
+
 # schedule.every(30).seconds.do(printhello)
 # # schedule.every(30).seconds.do(printhello)
 
- 
+
 # #실제 실행하게 하는 코드
 # while True:
 #     schedule.run_pending()
@@ -169,7 +167,6 @@
 #     querystring = {"market":list,"count":"1"}
 #     response = requests.request("GET", url, params=querystring).text
 #     print(json.loads(response))
-
 
 
 # #%%
@@ -293,270 +290,370 @@
 #     else:
 #         pass
 
-#%%
-import jwt   # PyJWT 
-import uuid
+# #%%
+# import jwt   # PyJWT
+# import uuid
+#
+# payload = {
+#     'access_key': 'NeC5CQaIHC1Jzslk9RXF77R1Q2gJCpFaQJINgxpj',
+#     'nonce': str(uuid.uuid4()),
+# }
+#
+# jwt_token = jwt.encode(payload, 'q8gCWTxOStFU7N2aK2HGpCcON5LSrQAalWH6EGGe')
+# authorization_token = 'Bearer {}'.format(jwt_token)
+#
+# #%%
+# import os
+# import jwt
+# import uuid
+# import hashlib
+# from urllib.parse import urlencode
+#
+# import requests
+#
+# access_key = 'NeC5CQaIHC1Jzslk9RXF77R1Q2gJCpFaQJINgxpj'
+# secret_key = 'q8gCWTxOStFU7N2aK2HGpCcON5LSrQAalWH6EGGe'
+# server_url = 'https://api.upbit.com'
+#
+# payload = {
+#     'access_key': access_key,
+#     'nonce': str(uuid.uuid4()),
+# }
+#
+# jwt_token = jwt.encode(payload, secret_key)
+# authorize_token = 'Bearer {}'.format(jwt_token)
+# headers = {"Authorization": authorize_token}
+#
+# res = requests.get(server_url + "/v1/accounts", headers=headers).json()
+# print(res)
+#
+#
+# #%%
+# import os
+# import jwt
+# import uuid
+# import hashlib
+# from urllib.parse import urlencode
+#
+# import requests
+#
+# # access_key = os.environ['UPBIT_OPEN_API_ACCESS_KEY']
+# # secret_key = os.environ['UPBIT_OPEN_API_SECRET_KEY']
+# # server_url = os.environ['UPBIT_OPEN_API_SERVER_URL']
+#
+#
+# market = f"KRW-{res[0]['currency']}"
+# volume = res[0]['balance']
+#
+#
+# # 매도
+# try:
+#     sell_query = {
+#         'market': market,
+#         'side': 'ask',
+#         'volume': volume,
+#         'price': None,
+#         'ord_type': 'market',
+#     }
+#     sell_query_string = urlencode(sell_query).encode()
+#
+#     sell_m = hashlib.sha512()
+#     sell_m.update(sell_query_string)
+#     sell_query_hash = sell_m.hexdigest()
+#
+#     payload = {
+#         'access_key': access_key,
+#         'nonce': str(uuid.uuid4()),
+#         'query_hash': sell_query_hash,
+#         'query_hash_alg': 'SHA512',
+#     }
+#
+#     jwt_token = jwt.encode(payload, secret_key)
+#     authorize_token = 'Bearer {}'.format(jwt_token)
+#     headers = {"Authorization": authorize_token}
+#
+#     sell_res = requests.post(server_url + "/v1/orders", params=sell_query, headers=headers)
+# except Exception as e:
+#     print(f"{market} is not in your wallet...", e)
+#     pass
+#
+#
+# # 매수
+# try:
+#     buy_query = {
+#         'market': market,
+#         'side': 'bid',
+#         'volume': None,
+#         'price': 5000,
+#         'ord_type': 'price',
+#     }
+#     buy_query_string = urlencode(buy_query).encode()
+#
+#     buy_m = hashlib.sha512()
+#     buy_m.update(buy_query_string)
+#     buy_query_hash = buy_m.hexdigest()
+#
+#     payload = {
+#         'access_key': access_key,
+#         'nonce': str(uuid.uuid4()),
+#         'query_hash': buy_query_hash,
+#         'query_hash_alg': 'SHA512',
+#     }
+#
+#     jwt_token = jwt.encode(payload, secret_key)
+#     authorize_token = 'Bearer {}'.format(jwt_token)
+#     headers = {"Authorization": authorize_token}
+#
+#     buy_res = requests.post(server_url + "/v1/orders", params=buy_query, headers=headers)
+# except Exception as e:
+#     print(f"{market} can't buy...", e)
+#     pass
+#
+#
+# #%%
+# lists = "KRW-SPND"
+#
+# for i in res:
+#     if lists == f"KRW-{i['currency']}":
+#         print(f"{lists} : {i['balance']}")
+#     else:
+#         print("없졍!!")
+#
+#
+# #%%
+# import requests
+# r = requests.get(r'http://jsonip.com')
+# ip= r.json()['ip']
+# print(ip)
+#
+#
+# #%%
+# for i in range(10):
+#     if i % 2 == 0:
+#         print(f"{i}는 짝수")
+#
+#
+# #%%
+# import requests
+# import json
+# from pprint import pprint
+# from datetime import datetime
+# import time
+# import os
+# import jwt
+# import uuid
+# import hashlib
+# from urllib.parse import urlencode
+#
+#
+# def ask_market(market, volume, price):
+#     sell_query = {
+#         'market': str(market),
+#         'side': 'ask',
+#         'volume': str(volume),
+#         # 'price': str(price),
+#         'ord_type': 'market',
+#     }
+#     sell_query_string = urlencode(sell_query).encode()
+#
+#     sell_m = hashlib.sha512()
+#     sell_m.update(sell_query_string)
+#     sell_query_hash = sell_m.hexdigest()
+#
+#     payload = {
+#         'access_key': access_key,
+#         'nonce': str(uuid.uuid4()),
+#         'query_hash': sell_query_hash,
+#         'query_hash_alg': 'SHA512',
+#     }
+#
+#     jwt_token = jwt.encode(payload, secret_key)
+#     authorize_token = 'Bearer {}'.format(jwt_token)
+#     headers = {"Authorization": authorize_token}
+#
+#     sell_res = requests.post(server_url + "/v1/orders", params=sell_query, headers=headers)
+#     return sell_res.json()
+#
+#
+#
+# access_key = 'NeC5CQaIHC1Jzslk9RXF77R1Q2gJCpFaQJINgxpj'
+# secret_key = 'q8gCWTxOStFU7N2aK2HGpCcON5LSrQAalWH6EGGe'
+# server_url = 'https://api.upbit.com'
+#
+# payload = {
+#     'access_key': access_key,
+#     'nonce': str(uuid.uuid4()),
+# }
+#
+# jwt_token = jwt.encode(payload, secret_key)
+# authorize_token = 'Bearer {}'.format(jwt_token)
+# headers = {"Authorization": authorize_token}
+#
+# wallte_res = requests.get(server_url + "/v1/accounts", headers=headers).json()
+#
+#
+# market_querystring = {"isDetails":"false"}
+# market_response = requests.request("GET", server_url + "/v1/market/all", params=market_querystring).json()
+#
+# coin_lists = []
+# for i in range(0, len(market_response)):
+#     coin_lists.append(market_response[i]["market"])
+# # print(krw_lists)
+#
+# search = "KRW"
+# krw_coins = [word for word in coin_lists if search in word]
+#
+# # print(krw_coins)
+# print(wallte_res)
+#
+#
+# # for coin in krw_coins:
+# #     for i in wallte_res:
+# #         if coin == f"KRW-{i['currency']}":
+# #             ask_market("KRW-XLM", volume, None)
+#
+#
+# for i in wallte_res:
+#     if "KRW-XLM" == f"{i['unit_currency']}-{i['currency']}":
+#         ask_market(f"{i['unit_currency']}-{i['currency']}", i['balance'], None)
+#         print(f"{i['unit_currency']}-{i['currency']} 매도")
+#     else:
+#         print("문제")
+#
+#
+# #%%
+# import os
+# import jwt
+# import uuid
+# import hashlib
+# from urllib.parse import urlencode
+#
+# import requests
+#
+# access_key = 'NeC5CQaIHC1Jzslk9RXF77R1Q2gJCpFaQJINgxpj'
+# secret_key = 'q8gCWTxOStFU7N2aK2HGpCcON5LSrQAalWH6EGGe'
+# server_url = 'https://api.upbit.com'
+#
+# query = {
+#     'uuid': '9ca023a5-851b-4fec-9f0a-48cd83c2eaae',
+# }
+# query_string = urlencode(query).encode()
+#
+# m = hashlib.sha512()
+# m.update(query_string)
+# query_hash = m.hexdigest()
+#
+# payload = {
+#     'access_key': access_key,
+#     'nonce': str(uuid.uuid4()),
+#     'query_hash': query_hash,
+#     'query_hash_alg': 'SHA512',
+# }
+#
+# jwt_token = jwt.encode(payload, secret_key)
+# authorize_token = 'Bearer {}'.format(jwt_token)
+# headers = {"Authorization": authorize_token}
+#
+# res = requests.get(server_url + "/v1/order", params=query, headers=headers)
+#
+# print(res.json())
+#
+# #%%
+# def print_num(num1 = 1000, num2 = 2000):
+#     print(num1)
+#     print(num2)
+#
+# print_num(, 3000)
 
-payload = {
-    'access_key': 'NeC5CQaIHC1Jzslk9RXF77R1Q2gJCpFaQJINgxpj',
-    'nonce': str(uuid.uuid4()),
-}
 
-jwt_token = jwt.encode(payload, 'q8gCWTxOStFU7N2aK2HGpCcON5LSrQAalWH6EGGe')
-authorization_token = 'Bearer {}'.format(jwt_token) 
+# a = {'uuid': 'd84c827d-af00-44c1-961c-5e27956e609e', 'side': 'ask', 'ord_type': 'market', 'price': None,
+#      'state': 'wait', 'market': 'KRW-ICX', 'created_at': '2021-03-17T14:36:37+09:00', 'volume': '4.57665903',
+#      'remaining_volume': '4.57665903', 'reserved_fee': '0.0', 'remaining_fee': '0.0', 'paid_fee': '0.0',
+#      'locked': '4.57665903', 'executed_volume': '0.0', 'trades_count': 0}
+#
+# print(a(indent=4))
 
-#%%
-import os
-import jwt
-import uuid
 import hashlib
-from urllib.parse import urlencode
-
-import requests
-
-access_key = 'NeC5CQaIHC1Jzslk9RXF77R1Q2gJCpFaQJINgxpj'
-secret_key = 'q8gCWTxOStFU7N2aK2HGpCcON5LSrQAalWH6EGGe'
-server_url = 'https://api.upbit.com'
-
-payload = {
-    'access_key': access_key,
-    'nonce': str(uuid.uuid4()),
-}
-
-jwt_token = jwt.encode(payload, secret_key)
-authorize_token = 'Bearer {}'.format(jwt_token)
-headers = {"Authorization": authorize_token}
-
-res = requests.get(server_url + "/v1/accounts", headers=headers).json()
-print(res)
-
-
-#%%
-import os
-import jwt
-import uuid
-import hashlib
-from urllib.parse import urlencode
-
-import requests
-
-# access_key = os.environ['UPBIT_OPEN_API_ACCESS_KEY']
-# secret_key = os.environ['UPBIT_OPEN_API_SECRET_KEY']
-# server_url = os.environ['UPBIT_OPEN_API_SERVER_URL']
-
-
-market = f"KRW-{res[0]['currency']}"
-volume = res[0]['balance']
-
-
-# 매도
-try:
-    sell_query = {
-        'market': market,
-        'side': 'ask',
-        'volume': volume,
-        'price': None,
-        'ord_type': 'market',
-    }
-    sell_query_string = urlencode(sell_query).encode()
-
-    sell_m = hashlib.sha512()
-    sell_m.update(sell_query_string)
-    sell_query_hash = sell_m.hexdigest()
-
-    payload = {
-        'access_key': access_key,
-        'nonce': str(uuid.uuid4()),
-        'query_hash': sell_query_hash,
-        'query_hash_alg': 'SHA512',
-    }
-
-    jwt_token = jwt.encode(payload, secret_key)
-    authorize_token = 'Bearer {}'.format(jwt_token)
-    headers = {"Authorization": authorize_token}
-
-    sell_res = requests.post(server_url + "/v1/orders", params=sell_query, headers=headers)
-except Exception as e:
-    print(f"{market} is not in your wallet...", e)
-    pass
-
-
-# 매수
-try:
-    buy_query = {
-        'market': market,
-        'side': 'bid',
-        'volume': None,
-        'price': 5000,
-        'ord_type': 'price',
-    }
-    buy_query_string = urlencode(buy_query).encode()
-
-    buy_m = hashlib.sha512()
-    buy_m.update(buy_query_string)
-    buy_query_hash = buy_m.hexdigest()
-
-    payload = {
-        'access_key': access_key,
-        'nonce': str(uuid.uuid4()),
-        'query_hash': buy_query_hash,
-        'query_hash_alg': 'SHA512',
-    }
-
-    jwt_token = jwt.encode(payload, secret_key)
-    authorize_token = 'Bearer {}'.format(jwt_token)
-    headers = {"Authorization": authorize_token}
-
-    buy_res = requests.post(server_url + "/v1/orders", params=buy_query, headers=headers)
-except Exception as e:
-    print(f"{market} can't buy...", e)
-    pass
-
-
-#%%
-lists = "KRW-SPND"
-
-for i in res:
-    if lists == f"KRW-{i['currency']}":
-        print(f"{lists} : {i['balance']}")
-    else:
-        print("없졍!!")
-
-
-#%%
-import requests
-r = requests.get(r'http://jsonip.com')
-ip= r.json()['ip']
-print(ip)
-
-
-#%%
-for i in range(10):
-    if i % 2 == 0:
-        print(f"{i}는 짝수")
-
-
-#%%
-import requests
-import json
-from pprint import pprint
-from datetime import datetime
 import time
-import os
-import jwt
 import uuid
-import hashlib
+from datetime import datetime
 from urllib.parse import urlencode
+import jwt
+import requests
 
 
-def ask_market(market, volume, price):
-    sell_query = {
-        'market': str(market),
-        'side': 'ask',
-        'volume': str(volume),
-        # 'price': str(price),
-        'ord_type': 'market',
-    }
-    sell_query_string = urlencode(sell_query).encode()
-
-    sell_m = hashlib.sha512()
-    sell_m.update(sell_query_string)
-    sell_query_hash = sell_m.hexdigest()
-
+def coin_wallet():
     payload = {
         'access_key': access_key,
         'nonce': str(uuid.uuid4()),
-        'query_hash': sell_query_hash,
-        'query_hash_alg': 'SHA512',
     }
 
     jwt_token = jwt.encode(payload, secret_key)
     authorize_token = 'Bearer {}'.format(jwt_token)
     headers = {"Authorization": authorize_token}
 
-    sell_res = requests.post(server_url + "/v1/orders", params=sell_query, headers=headers)
-    return sell_res.json()
+    wallet_res = requests.get(server_url + "/v1/accounts", headers=headers).json()
 
+    return wallet_res
 
 
 access_key = 'NeC5CQaIHC1Jzslk9RXF77R1Q2gJCpFaQJINgxpj'
 secret_key = 'q8gCWTxOStFU7N2aK2HGpCcON5LSrQAalWH6EGGe'
 server_url = 'https://api.upbit.com'
 
-payload = {
-    'access_key': access_key,
-    'nonce': str(uuid.uuid4()),
-}
+wallet_res = coin_wallet()
 
-jwt_token = jwt.encode(payload, secret_key)
-authorize_token = 'Bearer {}'.format(jwt_token)
-headers = {"Authorization": authorize_token}
-
-wallte_res = requests.get(server_url + "/v1/accounts", headers=headers).json()
+# for i in wallet_res:
+#      if "KRW-BTC" == f"{i['unit_currency']}-{i['currency']}":
+#           print(f"{i['unit_currency']}-{i['currency']}")
 
 
-market_querystring = {"isDetails":"false"}
+market_querystring = {"isDetails": "false"}
 market_response = requests.request("GET", server_url + "/v1/market/all", params=market_querystring).json()
 
 coin_lists = []
 for i in range(0, len(market_response)):
     coin_lists.append(market_response[i]["market"])
-# print(krw_lists)
+# print(coin_lists)
 
 search = "KRW"
 krw_coins = [word for word in coin_lists if search in word]
-
-# print(krw_coins)
-print(wallte_res)
+# print(krw_coin)
 
 
-# for coin in krw_coins:
-#     for i in wallte_res:
-#         if coin == f"KRW-{i['currency']}":
-#             ask_market("KRW-XLM", volume, None)
+MA3_querystring = {"market": 'KRW-BTC', "count": "5"}
+MA30_querystring = {"market": 'KRW-BTC', "count": "49"}
+time.sleep(1)
+
+MA3_response = requests.request("GET", server_url + "/v1/candles/minutes/30",
+                                params=MA3_querystring).json()
+MA30_response = requests.request("GET", server_url + "/v1/candles/minutes/30",
+                                 params=MA30_querystring).json()
+
+MA3_sum = 0
+MA3_pre_sum = 0
+for i in range(1, len(MA3_response)):
+     MA3_sum += MA3_response[-i]["trade_price"]
+     MA3_pre_sum += MA3_response[-i]["opening_price"]
+
+pre_MA3 = round(MA3_pre_sum / (len(MA3_response) - 1), 2)
+now_MA3 = round(MA3_sum / (len(MA3_response) - 1), 2)
+
+MA30_sum = 0
+MA30_pre_sum = 0
+for j in range(1, len(MA30_response)):
+     MA30_sum += MA30_response[-j]["trade_price"]
+     MA30_pre_sum += MA30_response[-j]["opening_price"]
+
+pre_MA30 = round(MA30_pre_sum / (len(MA30_response) - 1), 2)
+now_MA30 = round(MA30_sum / (len(MA30_response) - 1), 2)
+
+for i in range(1, len(MA3_response)):
+     print(MA3_response[-i]['candle_date_time_kst'])
 
 
-for i in wallte_res:
-    if "KRW-XLM" == f"{i['unit_currency']}-{i['currency']}":
-        ask_market(f"{i['unit_currency']}-{i['currency']}", i['balance'], None)
-        print(f"{i['unit_currency']}-{i['currency']} 매도")
-    else:
-        print("문제")
+print(pre_MA3)
+print(pre_MA30)
+print(now_MA3)
+print(now_MA30)
 
-
-#%%
-import os
-import jwt
-import uuid
-import hashlib
-from urllib.parse import urlencode
-
-import requests
-
-access_key = 'NeC5CQaIHC1Jzslk9RXF77R1Q2gJCpFaQJINgxpj'
-secret_key = 'q8gCWTxOStFU7N2aK2HGpCcON5LSrQAalWH6EGGe'
-server_url = 'https://api.upbit.com'
-
-query = {
-    'uuid': '9ca023a5-851b-4fec-9f0a-48cd83c2eaae',
-}
-query_string = urlencode(query).encode()
-
-m = hashlib.sha512()
-m.update(query_string)
-query_hash = m.hexdigest()
-
-payload = {
-    'access_key': access_key,
-    'nonce': str(uuid.uuid4()),
-    'query_hash': query_hash,
-    'query_hash_alg': 'SHA512',
-}
-
-jwt_token = jwt.encode(payload, secret_key)
-authorize_token = 'Bearer {}'.format(jwt_token)
-headers = {"Authorization": authorize_token}
-
-res = requests.get(server_url + "/v1/order", params=query, headers=headers)
-
-print(res.json())
