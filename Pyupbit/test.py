@@ -800,6 +800,86 @@ for i in krw_coins:
         print(f"{i} : {ticker_info(i)[0]['acc_trade_price_24h']}")
         cnt +=1
         time.sleep(0.7)
+print(cnt)
 
 #%%
-print(cnt)
+import requests
+
+a = list(range(10))
+print(a)
+
+#%%
+import requests
+
+remove_list = [0, 1]
+append_list = ["x", "y"]
+
+for (i, j) in (remove_list, append_list):
+    print(i)
+    print(j)
+    # a.remove(i)
+    # a.append(i)
+
+print(a)
+
+#%%
+a = 1,2,3,4
+b = "a", "b", "c"
+print(list(a))
+print(list(b))
+
+#%%
+import requests
+import time
+
+# 마켓에 올라와 있는 코인의 현재 정보
+def ticker_info(markets):
+    ticker_info_querystring = {"markets": markets}
+    ticker_info_response = requests.request("GET", server_url + "/v1/ticker", params=ticker_info_querystring).json()
+
+    return ticker_info_response
+
+server_url = 'https://api.upbit.com'
+market_querystring = {"isDetails": "false"}
+market_response = requests.request("GET", server_url + "/v1/market/all", params=market_querystring).json()
+
+coin_lists = []
+for i in range(0, len(market_response)):
+    coin_lists.append(market_response[i]["market"])
+# print(coin_lists)
+
+# 원화로 거래되고 있는 코인들의 리스트를 출력
+search = "KRW"
+krw_coins = [word for word in coin_lists if search in word]
+# print(krw_coins)
+
+
+# 사용자가 조건에 따라 직접 코인을 추가하거나 삭제할 수 있습니다
+append_lists = []
+remove_lists = ['KRW-BTC']
+
+
+krw_coins_final = [i for i in krw_coins if ticker_info(i)[0]['acc_trade_price_24h'] > 30000000000]
+
+# for i in krw_coins:
+#     if ticker_info(i)[0]['acc_trade_price_24h'] > 30000000000:
+#         krw_coins_final.append(i)
+# print(krw_coins_final)
+
+# for j in append_lists:
+#     krw_coins_final.append(j)
+# print(krw_coins_final)
+
+# for k in remove_lists:
+#     krw_coins_final.remove(k)
+# print(krw_coins_final)
+
+#%%
+a = "KRW-BTC",
+a = list(a)
+print(a)
+
+#%%
+import funcpy as fc
+
+fc.find_my_ip()
