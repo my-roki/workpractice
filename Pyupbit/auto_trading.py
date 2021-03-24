@@ -162,7 +162,7 @@ while True:
 
         for coin in krw_coins:
             try:
-                MA4_querystring = {"market": coin, "count": "5"}
+                MA4_querystring = {"market": coin, "count": "4"}
                 MA48_querystring = {"market": coin, "count": "49"}
                 time.sleep(0.5)
 
