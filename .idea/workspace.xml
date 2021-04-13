@@ -2,8 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d220bb9-4177-46b7-bb7c-17dcc2a197ec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auto_task/.idea/auto_task.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/.idea/Pyupbit.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/all_bid.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/auto_trading.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/funcpy.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pyupbit/test.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
