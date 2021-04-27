@@ -1,5 +1,8 @@
+import sys
+import os
 import tkinter.ttk as ttk
 from tkinter import *
+from functools import partial
 
 import basic_function as func
 
@@ -8,17 +11,10 @@ root.title("roki_GUI")
 # root.geometry("240x320")  # 가로x세로
 root.resizable(False, False) # x(너비), y(높이) 값 변경 불가 (창 크기 변경 불가)
 
-# 파일 프레임
+# 파일 프레임 및 리스트 프레임
 file_frame = Frame(root)
 file_frame.pack(fill="x", padx=5, pady=5)
 
-btn_add_file = Button(file_frame, padx=5, pady=5, width=12, text="파일추가", command=func.add_file)
-btn_del_file = Button(file_frame, padx=5, pady=5, width=12, text="파일삭제" )
-
-btn_add_file.pack(side="left")
-btn_del_file.pack(side="right")
-
-# 리스트 프레임
 list_frame = Frame(root)
 list_frame.pack(fill="both", padx=5, pady=5)
 
@@ -29,6 +25,13 @@ scrollbar.pack(side="right", fill="y")
 list_file.pack(side="left", fill="both", expand=True)
 scrollbar.config(command=list_file.yview)
 
+btn_add_file = Button(file_frame, padx=5, pady=5, width=12, text="파일추가", command=partial(func.add_file,list_file))
+btn_del_file = Button(file_frame, padx=5, pady=5, width=12, text="파일삭제", command=partial(func.delete_file,list_file) )
+
+btn_add_file.pack(side="left")
+btn_del_file.pack(side="right")
+
+
 # 저장경로 프레임
 path_frame = LabelFrame(root, text="저장경로")
 path_frame.pack(fill="x", padx=5, pady=5, ipady=5)
@@ -36,7 +39,7 @@ path_frame.pack(fill="x", padx=5, pady=5, ipady=5)
 txt_dst_path = Entry(path_frame)
 txt_dst_path.pack(side="left", fill="x", expand=True, padx=5, pady=5, ipady=4)
 
-btn_dest_path = Button(path_frame, text="찾아보기", width=10)
+btn_dest_path = Button(path_frame, text="찾아보기", width=10, command=partial(func.browse_dest_path, txt_dst_path))
 btn_dest_path.pack(side="right", padx=5, pady=5)
 
 # 옵션 프레임
@@ -91,7 +94,7 @@ frame_run.pack(fill="x", padx=5, pady=5)
 btn_close = Button(frame_run, padx=5, pady=5, text="닫기", width=12, command=root.quit)
 btn_close.pack(side="right", padx=5, pady=5)
 
-btn_start = Button(frame_run, padx=5, pady=5, text="시작", width=12)
+btn_start = Button(frame_run, padx=5, pady=5, text="시작", width=12, command=partial(func.start, cmb_width, cmb_space, cmb_format, list_file, txt_dst_path, p_var, progress_bar))
 btn_start.pack(side="right", padx=5, pady=5)
 
 root.mainloop()
