@@ -11,7 +11,7 @@ def add_file(list_file):
     files = filedialog.askopenfilenames(
         title="이미지 파일을 선택하세요", 
         filetypes=(("PNG파일", "*.png"), ("모든 파일", "*.*")),
-        initialdir=r"C:\Users\윤창록\Pictures\Saved Pictures")  # 최초 탐색 경로
+        initialdir=r"C:")  # 최초 탐색 경로
     
     for file in files: 
         # print(file)
